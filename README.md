@@ -1,2 +1,2 @@
-# react-nodejs-typescript-example
-Example project for the react and node with typescript
+# react-api-calls-example
+Example Project on how to make API calls in React Application written in typescript

@@ -9,20 +9,25 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "tslint": "tslint --project tsconfig.json --config tslint.json",
     "tslint-fix": "tslint --project tsconfig.json --config tslint.json --fix",
-    "build": "webpack"
+    "build": "webpack",
+    "test:unit": "ENV_FILE=./config/.env.test jest"
   },
   "keywords": [],
   "author": "Bhargav Bachina",
   "license": "ISC",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "node-fetch": "^3.3.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.7",
+    "@types/jest": "^29.5.0",
+    "jest": "^29.5.0",
     "nodemon": "^2.0.4",
+    "ts-jest": "^29.1.0",
     "ts-loader": "^8.0.2",
     "ts-node": "^8.10.2",
-    "typescript": "^3.9.7",
+    "typescript": "^5.0.4",
     "webpack": "^4.44.1",
     "webpack-cli": "^3.3.12"
   }

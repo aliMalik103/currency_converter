@@ -1,7 +1,7 @@
 import * as bodyParser from "body-parser";
 import * as express from "express";
 import { Logger } from "../logger/logger";
-import User from "./user";
+import Conversion from "./conversion";
 
 class Routes {
 
@@ -27,7 +27,7 @@ class Routes {
     private routes(): void {
 
         // user route
-        this.express.use("/", User);
+        this.express.use("/", Conversion);
     }
 }
 
