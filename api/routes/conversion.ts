@@ -1,14 +1,11 @@
 import * as bodyParser from "body-parser";
 import * as express from "express";
 import { Logger } from "../logger/logger";
-import * as https from 'https';
 import { ConversionService } from "./conversion.service";
 class Conversion {
 
   public express: express.Application;
   public logger: Logger;
-
-  // array to hold users
   public conversions: any[];
   private conversionService:ConversionService;
 
@@ -46,26 +43,7 @@ class Conversion {
     });
   }
 
-
 }
-const fetchData = async (options: any) => {
-  return new Promise((resolve, reject) => {
-    const request = https.request(options, (response: any) => {
-      let data: string = '';
-      response.on('data', (chunk: any) => {
-        data += chunk;
-      });
-      response.on('end', () => {
-        const res: any = JSON.parse(data);
-        const convertedAmount: string = res.result.toFixed(2);
-        resolve(convertedAmount);
-      });
-    });
-    request.on('error', (error: Error) => {
-      reject(error);
-    });
-    request.end();
-  });
-};
+
 
 export default new Conversion().express;

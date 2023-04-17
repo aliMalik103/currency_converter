@@ -1,48 +1,56 @@
 import * as https from 'https';
-export  class ConversionService {
 
-    constructor(){}
+interface apiRespone {
+  rates: {
 
-   public async convert(toCurrency:string,fromCurrency:string,amount:number){
+  }
+}
+export class ConversionService {
 
-        const accessKey = '5u90lRvl1nbQ9mPLqBnZqu2vrBr2mFRQ';
-        const options: https.RequestOptions = {
-            hostname: 'api.apilayer.com',
-            path: `/exchangerates_data/convert?to=${toCurrency}&from=${fromCurrency}&amount=${amount}&apikey=${accessKey}`,
-            method: 'GET'
-        };
+  constructor() { }
 
-        try {
-            const convertedAmount = await fetchData(options);
-            const conversion = {
-              fromCurrency,
-              toCurrency,
-              amount,
-              convertedAmount
-            };
-            return conversion;
-          } catch (error) {
-            console.error(error);
-          }
+  public async convert(toCurrency: string, fromCurrency: string, amount: number) {
+
+    const accessKey = 'bee9f72971924e0fbe44a6010278730f';
+    const options: https.RequestOptions = {
+      hostname: 'openexchangerates.org',
+      path: `/api/latest.json?app_id=${accessKey}`,
+      method: 'GET'
+    };
+    try {
+      const convertedAmount = await fetchData(options, toCurrency, amount);
+      const conversion = {
+        fromCurrency,
+        toCurrency,
+        amount,
+        convertedAmount
+      };
+      return conversion;
+    } catch (error) {
+      console.error(error);
     }
+  }
 }
 
-const fetchData = async (options: any) => {
-    return new Promise((resolve, reject) => {
-      const request = https.request(options, (response: any) => {
-        let data: string = '';
-        response.on('data', (chunk: any) => {
-          data += chunk;
-        });
-        response.on('end', () => {
-          const res: any = JSON.parse(data);
-          const convertedAmount: string = res.result.toFixed(2);
-          resolve(convertedAmount);
-        });
+const fetchData = async (options: any, targetCurrency: string, amount: number) => {
+  return new Promise((resolve, reject) => {
+    const request = https.request(options, (response: any) => {
+      let data: string = '';
+      response.on('data', (chunk: any) => {
+        data += chunk;
       });
-      request.on('error', (error: Error) => {
-        reject(error);
+      response.on('end', () => {
+        const responseData = JSON.parse(data);
+        const exchangeRate = responseData.rates[targetCurrency];
+
+        // Convert the amount to the target currency
+        const convertedAmount = amount / exchangeRate;
+        resolve(convertedAmount.toFixed(2));
       });
-      request.end();
     });
-  };
+    request.on('error', (error: Error) => {
+      reject(error);
+    });
+    request.end();
+  });
+};

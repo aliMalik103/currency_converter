@@ -8,28 +8,34 @@ import { AppService } from './services/app.service';
 import { History } from './components/History';
 import { useState } from 'react';
 import React from 'react';
-
+import LoadingOverlay from 'react-loading-overlay';
+ 
 function App() {
 
   const [numberOfConersions, setNumberOfConversions] = useState<number>(0);
   const [currency, setCurrency] = useState<any>({});
   const [history, setHistory] = useState<any>([]);
+  const [loading,setLoading]=useState<boolean>(false);
   const [convertedAmount, setconvertedAmount] = useState<any>(0)
 
   const appService = new AppService();
 
   const convert = async (e: any) => {
+    setLoading(true);
     const response = await appService.convertAPI(currency);
     if (response) {
       setconvertedAmount(response.convertedAmount)
       setNumberOfConversions(numberOfConersions + 1);
     }
+    setLoading(false);
   }
 
   const getAllConversions = async () => {
+    setLoading(true);
     const conversions = await appService.getConversionsAPI();
     setHistory(conversions);
     setNumberOfConversions(conversions.length);
+    setLoading(false);
   }
 
 
@@ -48,9 +54,16 @@ function App() {
   }
 
   return (
+    <LoadingOverlay
+    active={loading}
+    spinner
+    text='Loading your content...'
+    >
     <div className="App">
+     
       <Header />
       <div className="container mrgnbtm">
+      
         <div className="row">
           <div className="col-md-10">
             <ConverionForm
@@ -68,11 +81,14 @@ function App() {
             />
           </div>
         </div>
+      
         <div className="row mrgnbtm">
           <History conversions={history}></History>
         </div>
       </div>
+     
     </div>
+    </LoadingOverlay>
   );
 
 }
